@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface IPeopleReposiroty extends JpaRepository<People, Integer> {
     List<People> findBylastnameStartingWith(String lastname);
+
+    List<People> findByCountry(String country);
 }

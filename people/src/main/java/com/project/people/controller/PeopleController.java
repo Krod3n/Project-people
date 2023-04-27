@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @SpringBootApplication
@@ -64,4 +67,23 @@ public class PeopleController {
     public List<People> findLastname(@PathVariable("lastname") String lastname) {
        return peopleReposiroty.findBylastnameStartingWith(lastname);
     }
+
+    @GetMapping("/pays/{pays}")
+    public List<People> peoplePays(@PathVariable("pays")String pays) {
+        List<People> listpeople = peopleReposiroty.findAll();
+                List<People> country = listpeople.stream()
+                .filter(p->p.getCountry().equals(pays))
+                .collect(Collectors.toList());
+        return country;
+    }
+
+    @GetMapping("/{country}/{telephone}")
+    public List<People> getPeopleCountrylastname(@PathVariable String country,@PathVariable String telephone){
+        List<People> peopleList = peopleReposiroty.findByCountry(country);
+
+        return peopleList.stream()
+                .filter(people -> people.getPhone().startsWith(telephone))
+                .collect(Collectors.toList());
+    }
+
 }
